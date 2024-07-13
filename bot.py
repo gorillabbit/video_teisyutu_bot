@@ -1,4 +1,5 @@
 """This module provides functionality for a Discord bot."""
+import logging
 from json import dump, loads
 from os import getenv
 from pathlib import Path
@@ -40,6 +41,7 @@ async def on_ready() -> None:
 
 @tasks.loop(hours=12) # 半日ごとに実行
 async def check_pending_list() -> None:
+    logging.info("Checking pending list...")
     """未提出リストにIDがある人にメンションを飛ばすタスク"""
     for guild in bot.guilds:
         for channel in guild.text_channels:
@@ -62,6 +64,7 @@ async def check_pending_list_in_channel(channel:TextChannel) -> None:
 
 async def process_participant_list(message:Message) -> None:
     """参加者リストを処理する関数"""
+    logging.info("参加者リストが投稿されたので未提出リストを作ります")
     for attachment in message.attachments:
         if attachment.filename == PARTICIPANT_JSON:
             json_content = await attachment.read()
@@ -72,6 +75,7 @@ async def process_participant_list(message:Message) -> None:
 
 async def update_pending_list(message:Message, author_id:int) -> None:
     """未提出リストをアップデートする"""
+    logging.info("提出されたのでアップデートします")
     async for msg in message.channel.history(limit=100):
         if msg.attachments:
             for attachment in msg.attachments:
