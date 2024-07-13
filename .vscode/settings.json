@@ -1,0 +1,5 @@
+{
+  "cSpell.words": ["dotenv"],
+  "ruff.organizeImports": false,
+  "ruff.format.args": ["--config=pyproject.toml"]
+}
