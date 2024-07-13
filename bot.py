@@ -19,11 +19,6 @@ PARTICIPANT_JSON = "participant.json"
 PENDING_JSON = "pending_list.json"
 PENDING = "未提出"
 
-# Google Sheets APIの認証情報を取得
-credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT, scopes=[SPREADSHEET_SCOPE])
-service = build("sheets", "v4", credentials=credentials)
-sheet = service.spreadsheets()
-
 # ボットのプレフィックスを設定
 intents = Intents.default()
 intents.message_content = True  # メッセージの内容を取得するための意図を有効にする
@@ -106,29 +101,6 @@ async def on_message(message:Message) -> None:
             await update_pending_list(message, message.author.id)
 
     await bot.process_commands(message)
-
-# 新しいチャンネルが作成された時に呼ばれるイベント
-@bot.event
-async def on_guild_channel_create(channel):
-    if isinstance(channel, discord.TextChannel) and channel.category_id == CATEGORY_ID:
-        requests = [{
-            "addSheet": {
-                "properties": {
-                    "title": channel.name
-                }
-            }
-        }]
-
-        body = {"requests": requests}
-
-        try:
-            sheet.batchUpdate(
-                spreadsheetId=SPREADSHEET_ID,
-                body=body
-            ).execute()
-            print(f"Sheet '{channel.name}' created successfully.")
-        except Exception as e:
-            print(f"An error occurred: {e}")
 
 # ボットを実行
 bot.run(DISCORD_BOT_TOKEN)
