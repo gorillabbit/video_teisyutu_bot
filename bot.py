@@ -41,8 +41,8 @@ async def on_ready() -> None:
 
 @tasks.loop(hours=12) # 半日ごとに実行
 async def check_pending_list() -> None:
-    logging.info("Checking pending list...")
     """未提出リストにIDがある人にメンションを飛ばすタスク"""
+    logging.info("Checking pending list...")
     for guild in bot.guilds:
         for channel in guild.text_channels:
             if channel.category_id == CATEGORY_ID:
