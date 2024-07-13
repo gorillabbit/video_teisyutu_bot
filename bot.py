@@ -94,7 +94,7 @@ async def on_message(message:Message) -> None:
     if message.channel.category_id == CATEGORY_ID:
         if message.attachments:
             await process_participant_list(message)
-        url_pattern = compile(r"https?://\S+")  # URLの正規表現
+        url_pattern = compile(r"https://22\.gigafile\.nu/[^\s]+")  # URLの正規表現
         if url_pattern.search(message.content):
             emoji = "👍"  # ここに使用したい絵文字を入力
             await message.add_reaction(emoji)
